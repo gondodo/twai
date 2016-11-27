@@ -26,19 +26,15 @@ class LineClient
   end
 
   def reply(replyToken, text)
-
-    messages = [
-      {
-        "type" => "text" ,
+    messages = [{
+        "type" => "text",
         "text" => text
-      }
-    ]
+    }]
 
     body = {
-      "replyToken" => replyToken ,
+      "replyToken" => replyToken,
       "messages" => messages
     }
     post('/v2/bot/message/reply', body.to_json)
   end
-
 end
