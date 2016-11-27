@@ -18,7 +18,8 @@ class WebhookController < ApplicationController
     case event_type
     when "message"
       input_text = event["message"]["text"]
-      output_text = input_text
+      # output_text = input_text
+      output_text = "返答できません"
     end
 
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
