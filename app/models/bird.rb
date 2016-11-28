@@ -13,7 +13,6 @@ class Bird < ActiveRecord::Base
     end
 
     since_id = nil
-    post = "乃木坂って知ってる？"
     # count : 取得する件数
     # result_type : 内容指定。recentで最近の内容、popularで人気の内容。
     # exclude : 除外する内容。retweetsでリツイートを除外。
