@@ -24,6 +24,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'dotenv-rails'
+gem 'nokogiri'
+gem 'mechanize'
+gem 'twitter'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -39,6 +42,7 @@ group :development, :test do
   gem 'byebug'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
+  gem 'pry-byebug'
 end
 
 group :development do

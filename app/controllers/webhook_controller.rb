@@ -18,8 +18,10 @@ class WebhookController < ApplicationController
     case event_type
     when "message"
       input_text = event["message"]["text"]
-      # output_text = input_text
-      output_text = "返答できません"
+      # ↓↓↓修正ポイント↓↓↓
+      tweet = Bird.search(input_text)
+      output_text = tweet
+      # ↑↑↑修正ポイント↑↑↑
     end
 
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
