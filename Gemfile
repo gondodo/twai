@@ -26,6 +26,7 @@ gem 'faraday_middleware'
 gem 'dotenv-rails'
 gem 'nokogiri'
 gem 'mechanize'
+gem 'twitter'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
