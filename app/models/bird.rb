@@ -5,8 +5,10 @@ require 'mechanize'
 class Bird < ActiveRecord::Base
   def self.search(post)
     url = "https://twitter.com/search?vertical=default&q=#{post}&src=typd&lang=ja"
+    opt = {}
+    opt['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/XXXXXXXXXXXXX Safari/XXXXXX Vivaldi/XXXXXXXXXX'
     charset = nil
-    html = open(url) do |f|
+    html = open(url, opt) do |f|
       charset = f.charset
       f.read
     end
