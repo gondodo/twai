@@ -26,6 +26,10 @@ class Bird < ActiveRecord::Base
     doc.xpath("//ol[@id='stream-items-id']/li/div/div[2]/div/p").each do |tweet|
       tweets_list << tweet.inner_text
     end
-    tweets_list[rand(tweets_list.size)]
+    if tweets_list.present?
+      tweets_list[rand(tweets_list.size)]
+    else
+      "せやなー、知らんけどｗ"
+    end
   end
 end
