@@ -12,21 +12,9 @@ class WebhookController < ApplicationController
       render :nothing => true, status: 470
     end
 
-    # event = params["events"][0]
-    # event_type = event["type"]
-    # replyToken = event["replyToken"]
-    #
-    # case event_type
-    # when "message"
-    #   input_text = event["message"]["text"]
-    #   tweet = Bird.search(input_text)
-    #   output_text = tweet
-    # end
-    #
-
     logger.info(params)
-    result = params["events"][0]
-    logger.info({from_line: result})
+    event = params["events"][0]
+    logger.info({from_line: event})
     # if result['content']['opType'].present?
     #
     #   mid = result['content']['params'][0]
@@ -57,13 +45,25 @@ class WebhookController < ApplicationController
     #     logger.info({fail: res})
     #   end
     # else
-      text_message = result['content']['text']
-      from_mid = result['content']['from']
+
+    # event = params["events"][0]
+    # event_type = event["type"]
+    # replyToken = event["replyToken"]
+    #
+    # case event_type
+    # when "message"
+    #   input_text = event["message"]["text"]
+    #   tweet = Bird.search(input_text)
+    #   output_text = tweet
+    # end
+    #
+      # 取得したテキスト
+      text_message = event["message"]["text"]
+      # 送ってきたユーザID
+      from_mid = result['source']['userId']
 
       last_message = Message.last.text_message
-
       user = User.find_by(mid: from_mid)
-
       Message.create(user_id: user.id, text_message: text_message)
 
       ### ここから修正 ###
