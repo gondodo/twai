@@ -60,7 +60,7 @@ class WebhookController < ApplicationController
       # 取得したテキスト
       text_message = event["message"]["text"]
       # 送ってきたユーザID
-      from_mid = result['source']['userId']
+      from_mid = event['source']['userId']
 
       last_message = Message.last.text_message
       user = User.find_by(mid: from_mid)
