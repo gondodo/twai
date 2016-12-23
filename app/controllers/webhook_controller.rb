@@ -23,11 +23,11 @@ class WebhookController < ApplicationController
     #   output_text = tweet
     # end
     #
-
+    logger.info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
     logger.info(params)
     result = params[:result][0]
     logger.info({from_line: result})
-
+    logger.info("----------------------------------")
     if result['content']['opType'].present?
 
       mid = result['content']['params'][0]
