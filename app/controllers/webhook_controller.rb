@@ -15,6 +15,7 @@ class WebhookController < ApplicationController
     logger.info(params)
     event = params["events"][0]
     logger.info({from_line: event})
+    
     # if result['content']['opType'].present?
     #
     #   mid = result['content']['params'][0]
