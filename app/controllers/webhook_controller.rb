@@ -62,6 +62,9 @@ class WebhookController < ApplicationController
       text_message = event["message"]["text"]
       # 送ってきたユーザID
       mid = event['source']['userId']
+      # replyToken
+      replyToken = event['replyToken']
+      
       logger.info(mid)
 
       if User.find_by(mid: mid) == nil
@@ -91,9 +94,8 @@ class WebhookController < ApplicationController
       ### ここまで修正 ###
 
       client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
-      res = client.send(message)
       # res = client.send(mid, message)
-      # res = client.reply(replyToken, output_text)
+      res = client.reply(replyToken, message)
 
       if res.status == 200
         logger.info({success: res})
