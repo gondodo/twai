@@ -60,18 +60,23 @@ class WebhookController < ApplicationController
       # 取得したテキスト
       text_message = event["message"]["text"]
       # 送ってきたユーザID
-      from_mid = event['source']['userId']
+      mid = event['source']['userId']
+      logger.info(mid)
 
-      user = User.find_by(mid: from_mid)
+      if User.find_by(mid: mid) == nil
+        user = User.create(mid: mid)
+      else
+        user = User.find_by(mid: mid)
+      end
       Message.create(user_id: user.id, text_message: text_message)
 
       ### ここから修正 ###
       docomo_client = DocomoClient.new(DOCOMO_API_KEY)
       response = nil
-      last_dialogue_info = LastDialogueInfo.find_by(mid: from_mid)
+      last_dialogue_info = LastDialogueInfo.find_by(mid: mid)
       if last_dialogue_info.nil?
         response =  docomo_client.dialogue(text_message)
-        last_dialogue_info = LastDialogueInfo.new(mid: from_mid, mode: response.body['mode'], da: response.body['da'], context: response.body['context'])
+        last_dialogue_info = LastDialogueInfo.new(mid: mid, mode: response.body['mode'], da: response.body['da'], context: response.body['context'])
       else
         response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
         last_dialogue_info.mode = response.body['mode']
@@ -82,8 +87,8 @@ class WebhookController < ApplicationController
       message = response['utt']
       ### ここまで修正 ###
 
-      client = LineClient.new(CHANNEL_ID, CHANNEL_SECRET, CHANNEL_MID, OUTBOUND_PROXY)
-      res = client.send([from_mid], message)
+      client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
+      res = client.send([mid], message)
       # res = client.reply(replyToken, output_text)
 
       if res.status == 200
