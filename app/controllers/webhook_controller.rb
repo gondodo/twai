@@ -86,7 +86,7 @@ class WebhookController < ApplicationController
       end
       last_dialogue_info.save!
       logger.info("------------------------------")
-      logger.info(massege)
+      logger.info(message)
       message = response['utt']
       ### ここまで修正 ###
 
