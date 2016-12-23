@@ -25,7 +25,8 @@ class WebhookController < ApplicationController
     #
     logger.info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
     logger.info(params)
-    result = params[:result][0]
+    result = params["events"][0]
+    logger.info("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW")
     logger.info({from_line: result})
     logger.info("----------------------------------")
     if result['content']['opType'].present?
