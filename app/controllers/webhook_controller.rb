@@ -62,7 +62,6 @@ class WebhookController < ApplicationController
       # 送ってきたユーザID
       from_mid = event['source']['userId']
 
-      last_message = Message.last.text_message
       user = User.find_by(mid: from_mid)
       Message.create(user_id: user.id, text_message: text_message)
 
