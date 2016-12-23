@@ -86,8 +86,8 @@ class WebhookController < ApplicationController
       end
       last_dialogue_info.save!
       logger.info("------------------------------")
-      logger.info(response)
-      message = response['utt']
+      logger.info(response.body)
+      message = response.body['utt']
       ### ここまで修正 ###
 
       client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
