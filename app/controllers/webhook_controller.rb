@@ -23,42 +23,40 @@ class WebhookController < ApplicationController
     #   output_text = tweet
     # end
     #
-    logger.info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
     logger.info(params)
     result = params["events"][0]
-    logger.info("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW")
     logger.info({from_line: result})
-    logger.info("----------------------------------")
-    if result['content']['opType'].present?
-
-      mid = result['content']['params'][0]
-
-      client = LineClient.new(CHANNEL_ID, CHANNEL_SECRET, CHANNEL_MID, OUTBOUND_PROXY)
-      res = client.profile(mid)
-
-      if res.status == 200
-        logger.info({success: res})
-
-        display_name = res.body['contacts'][0]['displayName']
-
-        opType = result['content']['opType']
-        case opType
-        when 4 then
-          user = User.create_with(display_name: display_name, status: 4).find_or_create_by(mid: mid)
-          user.display_name = display_name
-          user.status = 4
-          user.save!
-        when 8 then
-          user = User.create_with(display_name: display_name, status: 8).find_or_create_by(mid: mid)
-          user.display_name = display_name
-          user.status = 8
-          user.save!
-        else
-        end
-      else
-        logger.info({fail: res})
-      end
-    else
+    # if result['content']['opType'].present?
+    #
+    #   mid = result['content']['params'][0]
+    #
+    #   client = LineClient.new(CHANNEL_ID, CHANNEL_SECRET, CHANNEL_MID, OUTBOUND_PROXY)
+    #   res = client.profile(mid)
+    #
+    #   if res.status == 200
+    #     logger.info({success: res})
+    #
+    #     display_name = res.body['contacts'][0]['displayName']
+    #
+    #     opType = result['content']['opType']
+    #     case opType
+    #     when 4 then
+    #       user = User.create_with(display_name: display_name, status: 4).find_or_create_by(mid: mid)
+    #       user.display_name = display_name
+    #       user.status = 4
+    #       user.save!
+    #     when 8 then
+    #       user = User.create_with(display_name: display_name, status: 8).find_or_create_by(mid: mid)
+    #       user.display_name = display_name
+    #       user.status = 8
+    #       user.save!
+    #     else
+    #     end
+    #   else
+    #     logger.info({fail: res})
+    #   end
+    # else
       text_message = result['content']['text']
       from_mid = result['content']['from']
 
@@ -94,7 +92,7 @@ class WebhookController < ApplicationController
       else
         logger.info({fail: res})
       end
-    end
+    # end
 
     render :nothing => true, status: :ok
   end
