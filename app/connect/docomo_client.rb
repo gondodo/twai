@@ -5,7 +5,7 @@ class DocomoClient
 
   def dialogue(message, mode = nil, context = nil)
     client = Docomoru::Client.new(api_key: @api_key)
-    response = client.create_dialogue(message, {mode: mode, context: context})
+    response = client.create_dialogue(message, {mode: mode, context: context, t: 20})
     return response
   end
 end
