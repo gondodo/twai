@@ -1,10 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
-# line_clientを追加
-require 'lib/line_client'
-# docomo_clientを追加
-require 'lib/docomo_client'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
