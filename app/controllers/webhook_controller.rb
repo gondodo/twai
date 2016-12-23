@@ -15,7 +15,7 @@ class WebhookController < ApplicationController
     logger.info(params)
     event = params["events"][0]
     logger.info({from_line: event})
-    
+
     # if result['content']['opType'].present?
     #
     #   mid = result['content']['params'][0]
@@ -85,6 +85,8 @@ class WebhookController < ApplicationController
         last_dialogue_info.context = response.body['context']
       end
       last_dialogue_info.save!
+      logger.info("------------------------------")
+      logger.info(massege)
       message = response['utt']
       ### ここまで修正 ###
 
