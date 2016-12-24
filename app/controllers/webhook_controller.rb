@@ -30,29 +30,34 @@ class WebhookController < ApplicationController
     docomo_client = DocomoClient.new(DOCOMO_API_KEY)
     response = nil
     last_dialogue_info = LastDialogueInfo.find_by(mid: mid)
+
+    # 一番最初のとき
     if last_dialogue_info.nil?
       response =  docomo_client.dialogue(text_message)
       last_dialogue_info = LastDialogueInfo.new(mid: mid, mode: response.body['mode'], da: response.body['da'], context: response.body['context'])
+    # 2回め以降のとき
     else
-      if last_dialogue_info.mode == "twitter"
+      # 前回設定モード判定
+      case last_dialogue_info.mode
+      when "twitter"
         message = Bird.search(text_message)
       else
-        response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
-        last_dialogue_info.mode = response.body['mode']
-        last_dialogue_info.da = response.body['da']
-        last_dialogue_info.context = response.body['context']
+        if text_message.include?("Twitter検索")
+          message = "Twitterから検索するで"
+          last_dialogue_info.mode = "twitter"
+        elsif text_message.include?("Twitter検索終わり")
+          message = "Twitterから検索やめるで"
+          last_dialogue_info.mode = "dialog"
+        else
+          response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
+          last_dialogue_info.mode = response.body['mode']
+          last_dialogue_info.da = response.body['da']
+          last_dialogue_info.context = response.body['context']
+          message = response.body['utt']
+        end
       end
+      last_dialogue_info.save!
     end
-
-    if text_message.include?("Twitter検索")
-      message = "Twitterから検索するで"
-      last_dialogue_info.mode = "twitter"
-    elsif text_message.include?("Twitter検索終わり")
-      last_dialogue_info.mode = "dialog"
-    else
-      message = response.body['utt']
-    end
-    last_dialogue_info.save!
 
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
     res = client.reply(replyToken, message)
