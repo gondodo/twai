@@ -47,7 +47,7 @@ class WebhookController < ApplicationController
     if text_message.include?("Twitter検索")
       message = "Twitterから検索するで"
       last_dialogue_info.mode = "twitter"
-    elsif text_message.include("Twitter検索終わり")
+    elsif text_message.include?("Twitter検索終わり")
       last_dialogue_info.mode = "dialog"
     else
       message = response.body['utt']
