@@ -49,7 +49,7 @@ class WebhookController < ApplicationController
       else
         if text_message == "Twitter検索"
           last_dialogue_info.mode = "twitter"
-          message = "Twitterから検索するで"
+          message = "Twitterから検索するで¥n やめる時は「Twitter検索終わり」っていうてな！"
         else
           response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
           last_dialogue_info.mode = response.body['mode']
