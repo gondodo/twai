@@ -40,14 +40,14 @@ class WebhookController < ApplicationController
       # 前回設定モード判定
       case last_dialogue_info.mode
       when "twitter"
-        if text_message.include?("Twitter検索終わり")
+        if text_message == "Twitter検索終わり"
           last_dialogue_info.mode = "dialog"
           message = "Twitterから検索やめるで"
         else
           message = Bird.search(text_message)
         end
       else
-        if text_message.include?("Twitter検索")
+        if text_message == "Twitter検索"
           last_dialogue_info.mode = "twitter"
           message = "Twitterから検索するで"
         else
