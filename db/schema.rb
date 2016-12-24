@@ -11,12 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161223030101) do
+ActiveRecord::Schema.define(version: 20161223110848) do
 
   create_table "birds", force: :cascade do |t|
     t.string   "account"
     t.string   "tweet"
     t.string   "post"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "last_dialogue_infos", force: :cascade do |t|
+    t.string   "mid"
+    t.string   "mode"
+    t.integer  "da"
+    t.string   "context"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

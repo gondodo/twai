@@ -14,12 +14,11 @@ class WebhookController < ApplicationController
 
     logger.info(params)
     event = params["events"][0]
-    # 取得したテキスト
-    text_message = event["message"]["text"]
     # 送ってきたユーザID
     mid = event['source']['userId']
-
     replyToken = event['replyToken']
+    # 取得したテキスト
+    text_message = event["message"]["text"]
 
     if User.find_by(mid: mid) == nil
       user = User.create(mid: mid)
@@ -28,7 +27,6 @@ class WebhookController < ApplicationController
     end
     Message.create(user_id: user.id, text_message: text_message)
 
-    ### ここから修正 ###
     docomo_client = DocomoClient.new(DOCOMO_API_KEY)
     response = nil
     last_dialogue_info = LastDialogueInfo.find_by(mid: mid)
@@ -36,14 +34,25 @@ class WebhookController < ApplicationController
       response =  docomo_client.dialogue(text_message)
       last_dialogue_info = LastDialogueInfo.new(mid: mid, mode: response.body['mode'], da: response.body['da'], context: response.body['context'])
     else
-      response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
-      last_dialogue_info.mode = response.body['mode']
-      last_dialogue_info.da = response.body['da']
-      last_dialogue_info.context = response.body['context']
+      if last_dialogue_info.mode == "twitter"
+        message = Bird.search(text_message)
+      else
+        response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
+        last_dialogue_info.mode = response.body['mode']
+        last_dialogue_info.da = response.body['da']
+        last_dialogue_info.context = response.body['context']
+      end
+    end
+
+    if text_message.include?("Twitter検索")
+      message = "Twitterから検索するで"
+      last_dialogue_info.mode = "twitter"
+    elsif text_message.include("Twitter検索終わり")
+      last_dialogue_info.mode = "dialog"
+    else
+      message = response.body['utt']
     end
     last_dialogue_info.save!
-    message = response.body['utt']
-    ### ここまで修正 ###
 
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
     res = client.reply(replyToken, message)
