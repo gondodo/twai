@@ -40,14 +40,16 @@ class WebhookController < ApplicationController
       # 前回設定モード判定
       case last_dialogue_info.mode
       when "twitter"
-        message = Bird.search(text_message)
+        if text_message.include?("Twitter検索終わり")
+          last_dialogue_info.mode = "dialog"
+          message = "Twitterから検索やめるで"
+        else
+          message = Bird.search(text_message)
+        end
       else
         if text_message.include?("Twitter検索")
-          message = "Twitterから検索するで"
           last_dialogue_info.mode = "twitter"
-        elsif text_message.include?("Twitter検索終わり")
-          message = "Twitterから検索やめるで"
-          last_dialogue_info.mode = "dialog"
+          message = "Twitterから検索するで"
         else
           response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
           last_dialogue_info.mode = response.body['mode']
