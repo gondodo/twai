@@ -18,8 +18,11 @@ class WebhookController < ApplicationController
     mid = event['source']['userId']
     replyToken = event['replyToken']
     # 取得したテキスト
+    if event["type"] == "message"
     text_message = event["message"]["text"]
-    text_message = "こんにちわ" if text_message.nil?
+    else
+      text_message = "こんにちわ"
+    end
 
     logger.info("text_message:#{text_message}")
     if User.find_by(mid: mid) == nil
