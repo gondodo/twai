@@ -19,7 +19,9 @@ class WebhookController < ApplicationController
     replyToken = event['replyToken']
     # 取得したテキスト
     text_message = event["message"]["text"]
+    text_message = "こんにちわ" if text_message.nil?
 
+    logger.info("text_message:#{text_message}")
     if User.find_by(mid: mid) == nil
       user = User.create(mid: mid)
     else
