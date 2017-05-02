@@ -84,6 +84,10 @@ class WebhookController < ApplicationController
             last_dialogue_info.context = response.body['context']
             message = response.body['utt']
         when "twttr"
+          logger.info("--------------------------------")
+          logger.info("--------------------------------")
+          logger.info(text_message)
+
           if text_message = "話題検索"
             message = "Twitterから検索するで！"
           else
@@ -94,7 +98,7 @@ class WebhookController < ApplicationController
       end
       last_dialogue_info.save!
     end
-    
+
     logger.info("success?")
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
     res = client.reply(replyToken, message)
