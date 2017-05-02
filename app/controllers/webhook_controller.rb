@@ -18,11 +18,11 @@ class WebhookController < ApplicationController
     mid = event['source']['userId']
     replyToken = event['replyToken']
     # 取得したテキスト
-    if event["type"] == "message"
+    # if event["type"] == "message"
     text_message = event["message"]["text"]
-    else
-      text_message = "こんにちわ"
-    end
+    # else
+    #   text_message = "こんにちわ"
+    # end
 
     logger.info("text_message:#{text_message}")
     if User.find_by(mid: mid) == nil
@@ -44,21 +44,28 @@ class WebhookController < ApplicationController
       last_dialogue_info.save!
     # 2回め以降のとき
     else
-      logger.info("secomd step")
+      logger.info("second step")
       # 前回設定モード判定
-      case last_dialogue_info.mode
-      when "twitter"
-        if text_message == "Twitter検索終わり"
+      # case last_dialogue_info.mode
+      # when "twitter"
+      #   if text_message == "Twitter検索終わり"
+      #     last_dialogue_info.mode = "dialog"
+      #     message = "Twitterから検索やめるで"
+      #     last_dialogue_info.save!
+      #   else
+      #     message = Bird.search(text_message)
+      #   end
+      # when "gourmet"
+      #
+      # else
+      case text_message
+        when "雑談"
           last_dialogue_info.mode = "dialog"
-          message = "Twitterから検索やめるで"
-          last_dialogue_info.save!
-        else
-          message = Bird.search(text_message)
-        end
-      else
-        if text_message == "Twitter検索"
-          last_dialogue_info.mode = "twitter"
-          message = "Twitterから検索するで！やめる時は「Twitter検索終わり」っていうてな！"
+        when "話題検索"
+          last_dialogue_info.mode = "twttr"
+          message = "Twitterから検索するで！"
+        when "グルメ検索"
+          last_dialogue_info.mode = "gourmet"
         else
           response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
           last_dialogue_info.mode = response.body['mode']
@@ -67,7 +74,7 @@ class WebhookController < ApplicationController
           message = response.body['utt']
         end
         last_dialogue_info.save!
-      end
+      # end
     end
 
     logger.info("success?")
