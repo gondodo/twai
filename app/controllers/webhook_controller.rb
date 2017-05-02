@@ -70,10 +70,10 @@ class WebhookController < ApplicationController
         else
           last_dialogue_info.mode = "dialog"
       end
-        last_dialogue_info.save!
 
         logger.info("--------------------------------")
         logger.info(last_dialogue_info.mode)
+        logger.info(text_message)
       # end
       # メッセージ設定
       case last_dialogue_info
@@ -92,8 +92,10 @@ class WebhookController < ApplicationController
         when "grmt"
 
       end
+      last_dialogue_info.save!
     end
-
+    logger.info("--------------------------------")
+    logger.info(message)
     logger.info("success?")
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
     res = client.reply(replyToken, message)
