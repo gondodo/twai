@@ -88,7 +88,7 @@ class WebhookController < ApplicationController
           logger.info("--------------------------------")
           logger.info(text_message)
 
-          if text_message = "話題検索"
+          if text_message == "話題検索"
             message = "Twitterから検索するで！"
           else
             message = Bird.search(text_message)
