@@ -76,7 +76,7 @@ class WebhookController < ApplicationController
         logger.info(text_message)
       # end
       # メッセージ設定
-      case last_dialogue_info
+      case last_dialogue_info.mode
         when "dialog", "srtr"
             response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
             last_dialogue_info.mode = response.body['mode']
