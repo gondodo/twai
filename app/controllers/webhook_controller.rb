@@ -64,31 +64,33 @@ class WebhookController < ApplicationController
         when "話題検索"
           last_dialogue_info.mode = "twttr"
         when "グルメ検索"
-          last_dialogue_info.mode = "gourmet"
+          last_dialogue_info.mode = "grmt"
         when "しりとり"
           last_dialogue_info.mode = "srtr"
         else
           last_dialogue_info.mode = "dialog"
-        end
+      end
         last_dialogue_info.save!
 
+        logger.info("--------------------------------")
+        logger.info(last_dialogue_info.mode)
       # end
       # メッセージ設定
       case last_dialogue_info
-      when "dialog", "srtr"
-          response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
-          last_dialogue_info.mode = response.body['mode']
-          last_dialogue_info.da = response.body['da']
-          last_dialogue_info.context = response.body['context']
-          message = response.body['utt']
-      when "twttr"
-        if text_message = "話題検索"
-          message = "Twitterから検索するで！"
-        else
-          message = Bird.search(text_message)
-        end
-      when "gourmet"
-        
+        when "dialog", "srtr"
+            response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
+            last_dialogue_info.mode = response.body['mode']
+            last_dialogue_info.da = response.body['da']
+            last_dialogue_info.context = response.body['context']
+            message = response.body['utt']
+        when "twttr"
+          if text_message = "話題検索"
+            message = "Twitterから検索するで！"
+          else
+            message = Bird.search(text_message)
+          end
+        when "grmt"
+
       end
     end
 
