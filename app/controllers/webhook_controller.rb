@@ -61,14 +61,14 @@ class WebhookController < ApplicationController
 
       # モード設定
       case text_message
+        when "雑談"
+          last_dialogue_info.mode = "dialog"
         when "話題検索"
           last_dialogue_info.mode = "twttr"
         when "グルメ検索"
           last_dialogue_info.mode = "grmt"
         when "しりとり"
           last_dialogue_info.mode = "srtr"
-        else
-          last_dialogue_info.mode = "dialog"
       end
 
         logger.info("--------------------------------")
@@ -90,12 +90,11 @@ class WebhookController < ApplicationController
             message = Bird.search(text_message)
           end
         when "grmt"
-
+          message = "実装中やで"
       end
       last_dialogue_info.save!
     end
-    logger.info("--------------------------------")
-    logger.info(message)
+    
     logger.info("success?")
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
     res = client.reply(replyToken, message)
