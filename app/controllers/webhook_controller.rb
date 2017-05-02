@@ -42,39 +42,21 @@ class WebhookController < ApplicationController
       response =  docomo_client.dialogue(text_message)
       last_dialogue_info = LastDialogueInfo.new(mid: mid, mode: response.body['mode'], da: response.body['da'], context: response.body['context'])
       last_dialogue_info.save!
+
     # 2回め以降のとき
     else
       logger.info("second step")
-      # 前回設定モード判定
-      # case last_dialogue_info.mode
-      # when "twitter"
-      #   if text_message == "Twitter検索終わり"
-      #     last_dialogue_info.mode = "dialog"
-      #     message = "Twitterから検索やめるで"
-      #     last_dialogue_info.save!
-      #   else
-      #     message = Bird.search(text_message)
-      #   end
-      # when "gourmet"
-      #
-      # else
 
       # モード設定
       case text_message
-        when "雑談"
+        when "雑談", "しりとり"
           last_dialogue_info.mode = "dialog"
         when "話題検索"
           last_dialogue_info.mode = "twttr"
         when "グルメ検索"
           last_dialogue_info.mode = "grmt"
-        when "しりとり"
-          last_dialogue_info.mode = "srtr"
       end
 
-        logger.info("--------------------------------")
-        logger.info(last_dialogue_info.mode)
-        logger.info(text_message)
-      # end
       # メッセージ設定
       case last_dialogue_info.mode
         when "dialog", "srtr"
@@ -84,10 +66,6 @@ class WebhookController < ApplicationController
             last_dialogue_info.context = response.body['context']
             message = response.body['utt']
         when "twttr"
-          logger.info("--------------------------------")
-          logger.info("--------------------------------")
-          logger.info(text_message)
-
           if text_message == "話題検索"
             message = "Twitterから検索するで！"
           else
