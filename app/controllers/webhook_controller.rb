@@ -65,7 +65,7 @@ class WebhookController < ApplicationController
             last_dialogue_info.da = response.body['da']
             last_dialogue_info.context = response.body['context']
             message = response.body['utt']
-            message = message[0..-4] if last_dialogue_info.mode == "srtr"
+            message.slice!("やけど") if last_dialogue_info.mode == "srtr"
         when "twttr"
           if text_message == "話題検索"
             message = "Twitterから検索するで！"
