@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161223110848) do
+ActiveRecord::Schema.define(version: 20170506055549) do
 
   create_table "birds", force: :cascade do |t|
     t.string   "account"
@@ -33,6 +33,27 @@ ActiveRecord::Schema.define(version: 20161223110848) do
   create_table "messages", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "text_message"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "prefs", force: :cascade do |t|
+    t.integer  "pref_cd"
+    t.string   "pref_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stations", force: :cascade do |t|
+    t.integer  "station_cd"
+    t.integer  "station_g_cd"
+    t.string   "station_name"
+    t.integer  "line_cd"
+    t.integer  "pref_cd"
+    t.string   "post"
+    t.string   "add"
+    t.float    "lon"
+    t.float    "lat"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
