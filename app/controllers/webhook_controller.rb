@@ -74,6 +74,7 @@ class WebhookController < ApplicationController
           end
         when "grmt"
           message = "実装中やで"
+          message = Gourmet.search(text_message)
       end
       last_dialogue_info.save!
     end
