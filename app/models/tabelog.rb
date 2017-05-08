@@ -1,70 +1,64 @@
 require 'open-uri'
 require 'nokogiri'
 require 'mechanize'
+require 'capybara/poltergeist'
 
 class Tabelog < ActiveRecord::Base
-  def self.scrape(post)
-    # クエリするURLを生成
-    url = create_url(post)
-    # htmlをパース(解析)してオブジェクトを生成
-    # doc = open_url(url)
-    doc = search(url,post)
+  belongs_to :Gourmet
 
-    tabelog_list = []
-    # logger.info("取得したツイート数": doc.xpath("//ol[@id='stream-items-id']/li/div/div[2]").size)
-    binding.pry
-    doc.xpath("//ol[@id='stream-items-id']/li/div/div[2]").each do |tweet|
-      tweet_hash = {
-        account: tweet.xpath("div/a/span[2]").inner_text,
-        tweet: tweet.xpath("div/p").inner_text
-      }
-      tweets_list << tweet_hash
+  def self.scrape(gourmet)
+    Capybara.register_driver :poltergeist do |app|
+      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 5000 })
     end
-    logger.info(tweets_list)
 
-    if tweets_list.present?
-      reply = tweets_list[rand(tweets_list.size)]
-    else
-      reply = {
-        account: "なし",
-        tweet: "せやなー、知らんけどｗ"
-      }
+    session = Capybara::Session.new(:poltergeist)
+    session.visit "https://tabelog.com/"
+
+    # ジャンル指定
+    logger.info("ジャンル指定")
+    genre_input = session.find('input#sk')
+    genre_input.native.send_key(gourmet.genre)
+
+    # 駅名指定
+    logger.info("駅名指定")
+    station_input = session.find('input#sa')
+    station_input.native.send_key("#{gourmet.station_name}駅")
+    sleep 2
+    # 画面遷移
+    logger.info("画面遷移")
+    submit = session.find('#js-global-search-btn')
+    submit.trigger('click')
+
+    # ランキング画面遷移
+    logger.info("ランキング画面遷移")
+    sleep 2
+    rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank', wait: 50)
+    rank_click.trigger('click')
+
+    # コスト選択
+    value = cost_calculate(gourmet.cost)
+    session.find('#lstcost-sidebar', wait:50).find(:xpath, "option[#{value}]").select_option
+    sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[2]/div[3]/button')
+    sidebar_btn.trigger('click')
+
+    # session.find(:xpath, '' )
+
+    # test
+    doc = open_url(session.current_url)
+    doc.xpath('//*[@id="column-main"]/ul/li').each do |node|
+      node.xpath('//a[@class="list-rst__rst-name-target cpy-rst-name"]').each do |node2|
+        @tabelog = gourmet.Tabelog.build
+        @tabelog.rst_name = node2.text
+        @tabelog.url = node2.attribute('href').value
+      end
     end
-    bird = Bird.create(account: reply[:account], tweet:reply[:tweet] , post: post)
-    bird.tweet
+    @tabelog.save
+    gourmet.Tabelog.first.url
+    # bird = Bird.create(account: reply[:account], tweet:reply[:tweet] , post: post)
+    # bird.tweet
   end
 
   private
-    def self.create_url(post)
-      url = URI.parse("https://tabelog.com/")
-      charset = nil
-      # url.query = {
-      #   vertical: "default",
-      #   q: post,
-      #   src:"typd",
-      #   lang: "ja"
-      # }.to_param
-      url
-    end
-
-    def self.search(url, post)
-      agent = Mechanize.new
-      agent.user_agent_alias = 'Mac Safari 4'
-      binding.pry
-      agent.get(url) do |page|
-        mypage = page.form_with(name: 'FrmSrchFreeWord') do |form|
-          # ログインに必要な入力項目を設定していく
-          # formオブジェクトが持っている変数名は入力項目(inputタグ)のname属性
-          form.sa = post.station_name
-          form.sk = post.genre
-        end.submit
-        binding.pry
-
-        doc = Nokogiri::HTML(mypage.content.toutf8)
-        binding.pry
-        h1_text = doc.xpath('//h1').text
-    end
-
     def self.open_url(url)
       charset = nil
       html = open(url) do |f|
@@ -73,5 +67,33 @@ class Tabelog < ActiveRecord::Base
       end
       doc = Nokogiri::HTML.parse(html, nil, charset)
     end
-  end
+
+    def self.cost_calculate(cost)
+      case cost
+      when (1..1000)
+        2
+      when (1001..2000)
+        3
+      when (2001..3000)
+        4
+      when (3001..4000)
+        5
+      when (4001..5000)
+        6
+      when (5001..6000)
+        7
+      when (6001..8000)
+        8
+      when (8001..10000)
+        9
+      when (10001..15000)
+        10
+      when (15001..20000)
+        11
+      when (20001..30000)
+        12
+      else
+        1
+      end
+    end
 end

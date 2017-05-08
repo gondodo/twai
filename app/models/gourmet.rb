@@ -1,4 +1,6 @@
 class Gourmet < ActiveRecord::Base
+  has_many :Tabelog
+
 
   SEARCH_STATUS = [
   "駅名検索",
@@ -31,7 +33,7 @@ class Gourmet < ActiveRecord::Base
         @keyword
       end
       @keyword.save
-      Tabelog.scrape(@keyword) if @keyword.status == SEARCH_STATUS.index("設定完了").to_s
+      message = Tabelog.scrape(@keyword) if @keyword.status == SEARCH_STATUS.index("設定完了").to_s
       message
     end
 
@@ -64,7 +66,7 @@ class Gourmet < ActiveRecord::Base
       elsif @station.size == 0
         "駅名が見つからんで"
       else
-        @keyword.station = @station[0].station_name
+        @keyword.station_name = @station[0].station_name
         set_status("ジャンル検索")
         "ジャンルはー？"
       end
