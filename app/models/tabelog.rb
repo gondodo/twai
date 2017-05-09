@@ -41,6 +41,7 @@ class Tabelog < ActiveRecord::Base
     logger.info(session.has_link?("ランキング"))
     until session.has_link?("ランキング") do
       logger.info("リンク探索")
+      logger.info(session.html)
     end
     session.click_link("ランキング")
 
