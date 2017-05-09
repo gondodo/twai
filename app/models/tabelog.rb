@@ -40,7 +40,7 @@ class Tabelog < ActiveRecord::Base
     # rank_click.trigger('click')
     logger.info(session.has_link?("ランキング"))
     until session.has_link?("ランキング") do
-      logger.info("探索中")
+      logger.info("リンク探索")
     end
     session.click_link("ランキング")
 
