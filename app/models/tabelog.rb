@@ -32,7 +32,8 @@ class Tabelog < ActiveRecord::Base
     # ランキング画面遷移
     logger.info("ランキング画面遷移")
     sleep 2
-    rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank', wait: 50)
+    logger.info("rank_click")
+    rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank', wait: 100)
     rank_click.trigger('click')
 
     # コスト選択
