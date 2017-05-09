@@ -33,7 +33,10 @@ class Tabelog < ActiveRecord::Base
     logger.info("ランキング画面遷移")
     sleep 2
     logger.info("rank_click")
-    rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank', wait: 100)
+    until session.has_css?('a.navi-rstlst__link.navi-rstlst__link--rank') do
+      logger.info("探索中")
+      rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank')
+    end
     rank_click.trigger('click')
 
     # コスト選択
