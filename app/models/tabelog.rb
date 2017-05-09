@@ -35,8 +35,8 @@ class Tabelog < ActiveRecord::Base
     logger.info("rank_click")
     until session.has_css?('a.navi-rstlst__link.navi-rstlst__link--rank') do
       logger.info("探索中")
-      rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank')
     end
+    rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank')
     rank_click.trigger('click')
 
     # コスト選択
