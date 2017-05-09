@@ -8,7 +8,7 @@ class Tabelog < ActiveRecord::Base
 
   def self.scrape(gourmet)
     Capybara.register_driver :poltergeist do |app|
-      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 5000 })
+      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10000 })
     end
 
     session = Capybara::Session.new(:poltergeist)
