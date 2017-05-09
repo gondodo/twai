@@ -38,10 +38,10 @@ class Tabelog < ActiveRecord::Base
     # end
     # rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank')
     # rank_click.trigger('click')
+    binding.pry
     logger.info(session.has_link?("ランキング"))
     until session.has_link?("ランキング") do
       logger.info("リンク探索")
-      logger.info(session.html)
     end
     session.click_link("ランキング")
 
