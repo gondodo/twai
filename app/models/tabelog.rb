@@ -37,8 +37,9 @@ class Tabelog < ActiveRecord::Base
     session.save_screenshot
 
     # コスト選択
+    sleep 2
     value = cost_calculate(gourmet.cost)
-    session.find('#lstcost-sidebar', wait:50).find(:xpath, "option[#{value}]").select_option
+    session.find('#lstcost-sidebar').find(:xpath, "option[#{value}]").select_option
     sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[2]/div[3]/button')
     sleep 2
     sidebar_btn.trigger('click')
