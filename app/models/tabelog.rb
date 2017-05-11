@@ -40,9 +40,9 @@ class Tabelog < ActiveRecord::Base
     # rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank')
     # rank_click.trigger('click')
     logger.info(session.has_link?("ランキング"))
-    until session.has_link?("ランキング") do
-      logger.info("リンク探索")
-    end
+    # until session.has_link?("ランキング") do
+    #   logger.info("リンク探索")
+    # end
     # session.driver.debug
     sleep 2
     session.click_link("ランキング")
