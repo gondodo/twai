@@ -15,20 +15,33 @@ class Tabelog < ActiveRecord::Base
     session = Capybara::Session.new(:poltergeist)
     session.visit "https://tabelog.com/"
 
-    # ジャンル指定
-    logger.info("ジャンル指定")
-    genre_input = session.find('input#sk')
-    genre_input.native.send_key(gourmet.genre)
-
     # 駅名指定
     logger.info("駅名指定")
     station_input = session.find('input#sa')
     station_input.native.send_key("#{gourmet.station_name}駅")
+    session.save_screenshot
     sleep 2
+
+    # ジャンル指定
+    logger.info("ジャンル指定")
+    genre_input = session.find('input#sk')
+    genre_input.native.send_key(gourmet.genre)
+    session.save_screenshot
+    sleep 2
+
     # 画面遷移
     logger.info("画面遷移")
     submit = session.find('#js-global-search-btn')
     submit.trigger('click')
+    sleep 2
+    session.save_screenshot
+
+    # コスト選択
+    value = cost_calculate(gourmet.cost)
+    session.find('#lstcost-sidebar', wait:50).find(:xpath, "option[#{value}]").select_option
+    sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[2]/div[3]/button')
+    sleep 2
+    sidebar_btn.trigger('click')
 
     # ランキング画面遷移
     logger.info("ランキング画面遷移")
@@ -46,17 +59,17 @@ class Tabelog < ActiveRecord::Base
     # session.driver.debug
     sleep 2
     logger.info(session.html)
+    session.save_screenshot
+    sleep 5
     session.click_link("ランキング")
 
-    # コスト選択
-    value = cost_calculate(gourmet.cost)
-    session.find('#lstcost-sidebar', wait:50).find(:xpath, "option[#{value}]").select_option
-    sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[2]/div[3]/button')
-    sidebar_btn.trigger('click')
+
 
     # session.find(:xpath, '' )
 
     # test
+    sleep 5
+    session.save_screenshot
     doc = open_url(session.current_url)
     doc.xpath('//*[@id="column-main"]/ul/li').each do |node|
       node.xpath('//a[@class="list-rst__rst-name-target cpy-rst-name"]').each do |node2|
