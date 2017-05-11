@@ -9,8 +9,9 @@ class Tabelog < ActiveRecord::Base
   def self.scrape(gourmet)
     Capybara.register_driver :poltergeist do |app|
       Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10000 })
+        # Capybara::Poltergeist::Driver.new(app, inspector: 'google-chrome-stable')
     end
-
+    Capybara.javascript_driver = :poltergeist
     session = Capybara::Session.new(:poltergeist)
     session.visit "https://tabelog.com/"
 
@@ -38,11 +39,12 @@ class Tabelog < ActiveRecord::Base
     # end
     # rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank')
     # rank_click.trigger('click')
-    binding.pry
     logger.info(session.has_link?("ランキング"))
     until session.has_link?("ランキング") do
       logger.info("リンク探索")
     end
+    # session.driver.debug
+    sleep 2
     session.click_link("ランキング")
 
     # コスト選択
