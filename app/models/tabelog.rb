@@ -45,6 +45,7 @@ class Tabelog < ActiveRecord::Base
     # end
     # session.driver.debug
     sleep 2
+    logger.info(session.html)
     session.click_link("ランキング")
 
     # コスト選択
