@@ -8,12 +8,12 @@ class Tabelog < ActiveRecord::Base
 
   def self.scrape(gourmet)
     Capybara.register_driver :poltergeist do |app|
-      # Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10000 })
+      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10000 })
         # Capybara::Poltergeist::Driver.new(app, inspector: 'google-chrome-stable')
-      Capybara::Poltergeist::Driver.new(app,:js_errors => false, :inspector => true)
+      # Capybara::Poltergeist::Driver.new(app,:js_errors => false, :inspector => true)
     end
-    # Capybara.javascript_driver = :poltergeist
-    Capybara.javascript_driver = :poltergeist_debug
+    Capybara.javascript_driver = :poltergeist
+    # Capybara.javascript_driver = :poltergeist_debug
     session = Capybara::Session.new(:poltergeist)
     session.visit "https://tabelog.com/"
 
@@ -35,21 +35,24 @@ class Tabelog < ActiveRecord::Base
     logger.info("画面遷移")
     submit = session.find('#js-global-search-btn')
     submit.trigger('click')
-    sleep 2
 
     # コスト選択
-    sleep 10
     value = cost_calculate(gourmet.cost)
-    session.driver.debug
+    # session.driver.debug
 
+    until session.has_css?('#lstcost-sidebar') do
+        logger.info("#lstcost-sidebar 探索中")
+    end
     session.find('#lstcost-sidebar').find(:xpath, "option[#{value}]").select_option
+
+    until session.has_css?('#column-side') do
+        logger.info("#column-side 探索中")
+    end
     sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[2]/div[3]/button')
-    sleep 2
     sidebar_btn.trigger('click')
 
     # ランキング画面遷移
     logger.info("ランキング画面遷移")
-    sleep 2
     logger.info("rank_click")
     # until session.has_css?('a.navi-rstlst__link.navi-rstlst__link--rank') do
     #   logger.info("探索中")
@@ -57,22 +60,15 @@ class Tabelog < ActiveRecord::Base
     # rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank')
     # rank_click.trigger('click')
     logger.info(session.has_link?("ランキング"))
-    # until session.has_link?("ランキング") do
-    #   logger.info("リンク探索")
-    # end
-    # session.driver.debug
-    sleep 2
-    # session.save_screenshot
-    sleep 5
-    session.driver.debug
+    until session.has_link?("ランキング") do
+      logger.info("ランキングリンク探索")
+    end
     session.click_link("ランキング")
 
 
 
-    # session.find(:xpath, '' )
-
     # test
-    sleep 10
+    sleep 2
     # session.save_screenshot
     @tabelog_list = []
     doc = open_url(session.current_url)
