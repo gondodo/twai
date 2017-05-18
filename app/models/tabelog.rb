@@ -42,7 +42,6 @@ class Tabelog < ActiveRecord::Base
     value = cost_calculate(gourmet.cost)
     # session.driver.debug
 
-    binding.pry
     until session.has_css?('#lstcost-sidebar') do
         sleep 2
         logger.info("#lstcost-sidebar 探索中")
