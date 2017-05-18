@@ -86,7 +86,7 @@ class Tabelog < ActiveRecord::Base
         @tabelog.save
       end
     end
-    @tabelog_list[0..3].to_s
+    @tabelog_list[0].to_s
     # bird = Bird.create(account: reply[:account], tweet:reply[:tweet] , post: post)
     # bird.tweet
   end
