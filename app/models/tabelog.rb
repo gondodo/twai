@@ -15,6 +15,8 @@ class Tabelog < ActiveRecord::Base
     Capybara.javascript_driver = :poltergeist
     # Capybara.javascript_driver = :poltergeist_debug
     session = Capybara::Session.new(:poltergeist)
+    # session.driver.headers = { "lang" => "en" }
+    session.driver.headers = { 'Accept-Language' => 'ja' }
     session.visit "https://tabelog.com/"
 
     # 駅名指定
