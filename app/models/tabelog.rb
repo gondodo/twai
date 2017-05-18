@@ -34,6 +34,7 @@ class Tabelog < ActiveRecord::Base
     # 画面遷移
     logger.info("画面遷移")
     submit = session.find('#js-global-search-btn')
+    binding.pry
     submit.trigger('click')
 
     # コスト選択
