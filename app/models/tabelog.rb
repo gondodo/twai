@@ -34,20 +34,22 @@ class Tabelog < ActiveRecord::Base
     # 画面遷移
     logger.info("画面遷移")
     submit = session.find('#js-global-search-btn')
-    binding.pry
     submit.trigger('click')
 
     # コスト選択
     value = cost_calculate(gourmet.cost)
     # session.driver.debug
 
+    binding.pry
     until session.has_css?('#lstcost-sidebar') do
+        sleep 2
         logger.info("#lstcost-sidebar 探索中")
     end
     session.find('#lstcost-sidebar').find(:xpath, "option[#{value}]").select_option
 
     until session.has_css?('#column-side') do
-        logger.info("#column-side 探索中")
+      sleep 2
+      logger.info("#column-side 探索中")
     end
     sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[2]/div[3]/button')
     sidebar_btn.trigger('click')
@@ -62,6 +64,7 @@ class Tabelog < ActiveRecord::Base
     # rank_click.trigger('click')
     logger.info(session.has_link?("ランキング"))
     until session.has_link?("ランキング") do
+      sleep 2
       logger.info("ランキングリンク探索")
     end
     session.click_link("ランキング")
