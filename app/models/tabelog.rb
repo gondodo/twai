@@ -19,14 +19,14 @@ class Tabelog < ActiveRecord::Base
     logger.info("駅名指定")
     station_input = session.find('input#sa')
     station_input.native.send_key("#{gourmet.station_name}駅")
-    session.save_screenshot
+    # session.save_screenshot
     sleep 2
 
     # ジャンル指定
     logger.info("ジャンル指定")
     genre_input = session.find('input#sk')
     genre_input.native.send_key(gourmet.genre)
-    session.save_screenshot
+    # session.save_screenshot
     sleep 2
 
     # 画面遷移
@@ -34,7 +34,7 @@ class Tabelog < ActiveRecord::Base
     submit = session.find('#js-global-search-btn')
     submit.trigger('click')
     sleep 2
-    session.save_screenshot
+    # session.save_screenshot
 
     # コスト選択
     sleep 2
@@ -59,8 +59,7 @@ class Tabelog < ActiveRecord::Base
     # end
     # session.driver.debug
     sleep 2
-    logger.info(session.html)
-    session.save_screenshot
+    # session.save_screenshot
     sleep 5
     session.click_link("ランキング")
 
@@ -69,18 +68,20 @@ class Tabelog < ActiveRecord::Base
     # session.find(:xpath, '' )
 
     # test
-    sleep 5
-    session.save_screenshot
+    sleep 10
+    # session.save_screenshot
+    @tabelog_list = []
     doc = open_url(session.current_url)
     doc.xpath('//*[@id="column-main"]/ul/li').each do |node|
       node.xpath('//a[@class="list-rst__rst-name-target cpy-rst-name"]').each do |node2|
         @tabelog = gourmet.Tabelog.build
         @tabelog.rst_name = node2.text
         @tabelog.url = node2.attribute('href').value
+        @tabelog_list << @tabelog.url
+        @tabelog.save
       end
     end
-    @tabelog.save
-    gourmet.Tabelog.first.url
+    @tabelog_list[0..3].to_s
     # bird = Bird.create(account: reply[:account], tweet:reply[:tweet] , post: post)
     # bird.tweet
   end
