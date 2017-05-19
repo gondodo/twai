@@ -47,8 +47,8 @@ class LineClient
         "type": "carousel",
         "columns": [
             {
-              "thumbnailImageUrl": tabelog[0].img_url,
-              "title": tabelog[0].rst_name,
+              "thumbnailImageUrl": "https://tabelog.ssl.k-img.com/restaurant/images/Rvw/63987/150x150_square_63987447.jpg",
+              "title": "#{tabelog[0].rst_name} ★#{tabelog[0].hoshi}",
               "text": tabelog[0].text,
               "actions": [
                 {
@@ -65,7 +65,7 @@ class LineClient
             },
             {
               "thumbnailImageUrl": tabelog[1].img_url,
-              "title": tabelog[1].rst_name,
+              "title": "#{tabelog[1].rst_name} ★#{tabelog[1].hoshi}",
               "text": tabelog[1].text,
               "actions": [
                 {
@@ -82,7 +82,7 @@ class LineClient
               },
               {
                 "thumbnailImageUrl": tabelog[2].img_url,
-                "title": tabelog[2].rst_name,
+                "title": "#{tabelog[2].rst_name} ★#{tabelog[2].hoshi}",
                 "text": tabelog[2].text,
                 "actions": [
                   {
@@ -99,7 +99,7 @@ class LineClient
                 },
                 {
                   "thumbnailImageUrl": tabelog[3].img_url,
-                  "title": tabelog[3].rst_name,
+                  "title": "#{tabelog[3].rst_name} ★#{tabelog[3].hoshi}",
                   "text": tabelog[3].text,
                   "actions": [
                     {
@@ -116,7 +116,7 @@ class LineClient
                   },
                   {
                     "thumbnailImageUrl": tabelog[4].img_url,
-                    "title": tabelog[4].rst_name,
+                    "title": "#{tabelog[4].rst_name} ★#{tabelog[4].hoshi}",
                     "text": tabelog[4].text,
                     "actions": [
                       {
