@@ -73,7 +73,6 @@ class WebhookController < ApplicationController
             message = Bird.search(text_message)
           end
         when "grmt"
-          message = "実装中やで"
           message = Gourmet.search(text_message)
       end
       last_dialogue_info.save!
@@ -81,7 +80,11 @@ class WebhookController < ApplicationController
 
     logger.info("success?")
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
-    res = client.reply(replyToken, message)
+    if message.include?("http")
+      res = client.reply_carousel(replyToken, message)
+    else
+      res = client.reply(replyToken, message)
+    end
 
     if res.status == 200
       logger.info({success: res})
