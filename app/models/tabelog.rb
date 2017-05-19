@@ -74,13 +74,13 @@ class Tabelog < ActiveRecord::Base
 
       # header
       @tabelog.rst_name = header.text
-      @tabelog.url = header.attribute("href").value
+      @tabelog.url = header.attribute("href").value.insert(8, "s.")
 
       # body
       logger.info("name: #{header.text}  text: #{content.xpath("div/div[@class='list-rst__comment']/a/strong").text}")
       @tabelog.text = content.xpath("div/div[@class='list-rst__comment']/a/strong").text
       @tabelog.hoshi = content.xpath("div/div[@class='list-rst__rate']/p/span").text.to_f
-      @tabelog.img_url = photo.xpath("div/p/a/img").attribute('data-original').value.insert(8, "s.")
+      @tabelog.img_url = photo.xpath("div/p/a/img").attribute('data-original').value
       @tabelog.save
     end
     gourmet.Tabelog.limit(5)
