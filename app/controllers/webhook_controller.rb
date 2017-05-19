@@ -82,6 +82,7 @@ class WebhookController < ApplicationController
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
     if message.kind_of?(Tabelog::ActiveRecord_AssociationRelation)
       logger.info("Tabelog::ActiveRecord_AssociationRelation: true")
+      logger.info(message)
       res = client.reply_carousel(replyToken, message)
     else
       res = client.reply(replyToken, message)

@@ -140,7 +140,6 @@ class LineClient
       "replyToken" => replyToken,
       "messages" => messages
     }
-    logger.info(body.to_json)
     post('/v2/bot/message/reply', body.to_json)
   end
 
