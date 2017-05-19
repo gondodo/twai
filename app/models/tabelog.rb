@@ -77,7 +77,7 @@ class Tabelog < ActiveRecord::Base
       @tabelog.url = header.attribute("href").value
 
       # body
-      binding.pry
+      logger.info("name: #{header.text}  text: #{content.xpath("div/div[@class='list-rst__comment']/a/strong").text}")
       @tabelog.text = content.xpath("div/div[@class='list-rst__comment']/a/strong").text
       @tabelog.hoshi = content.xpath("div/div[@class='list-rst__rate']/p/span").text.to_f
       @tabelog.img_url = photo.xpath("div/p/a/img").attribute('data-original').value
