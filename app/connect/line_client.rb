@@ -47,7 +47,7 @@ class LineClient
         "type": "carousel",
         "columns": [
             {
-              "thumbnailImageUrl": tabelog[1].img_url.to_s,
+              "thumbnailImageUrl": tabelog[0].img_url.to_s,
               "title": "#{tabelog[0].rst_name} ★#{tabelog[0].hoshi}",
               "text": tabelog[0].text,
               "actions": [
