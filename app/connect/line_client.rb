@@ -42,7 +42,7 @@ class LineClient
     messages = [
       {
       "type": "template",
-      "altText": "",
+      "altText": "this is menu",
       "template": {
         "type": "carousel",
         "columns": [
