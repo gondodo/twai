@@ -80,7 +80,7 @@ class Tabelog < ActiveRecord::Base
       logger.info("name: #{header.text}  text: #{content.xpath("div/div[@class='list-rst__comment']/a/strong").text}")
       @tabelog.text = content.xpath("div/div[@class='list-rst__comment']/a/strong").text
       @tabelog.hoshi = content.xpath("div/div[@class='list-rst__rate']/p/span").text.to_f
-      @tabelog.img_url = photo.xpath("div/p/a/img").attribute('data-original').value
+      @tabelog.img_url = photo.xpath("div/p/a/img").attribute('data-original').value.insert(8, "s.")
       @tabelog.save
     end
     gourmet.Tabelog.limit(5)
