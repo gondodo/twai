@@ -74,13 +74,13 @@ class WebhookController < ApplicationController
           end
         when "grmt"
           message = Gourmet.search(text_message)
-      end
+        end
       last_dialogue_info.save!
     end
 
     logger.info("success?")
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
-    if message.include?("http")
+    if message.kind_of?(Tabelog::ActiveRecord_AssociationRelation)
       res = client.reply_carousel(replyToken, message)
     else
       res = client.reply(replyToken, message)

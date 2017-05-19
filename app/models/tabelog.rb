@@ -23,7 +23,6 @@ class Tabelog < ActiveRecord::Base
     logger.info("駅名指定")
     station_input = session.find('input#sa')
     station_input.native.send_key("#{gourmet.station_name}駅")
-    # session.save_screenshot
     sleep 2
 
     # ジャンル指定
@@ -43,8 +42,7 @@ class Tabelog < ActiveRecord::Base
     # session.driver.debug
 
     until session.has_css?('#lstcost-sidebar') do
-        sleep 2
-        logger.info("#lstcost-sidebar 探索中")
+      logger.info("#lstcost-sidebar 探索中")
     end
     session.find('#lstcost-sidebar').find(:xpath, "option[#{value}]").select_option
 
@@ -57,39 +55,34 @@ class Tabelog < ActiveRecord::Base
 
     # ランキング画面遷移
     logger.info("ランキング画面遷移")
-    logger.info("rank_click")
-    # until session.has_css?('a.navi-rstlst__link.navi-rstlst__link--rank') do
-    #   logger.info("探索中")
-    # end
-    # rank_click = session.find('a.navi-rstlst__link.navi-rstlst__link--rank')
-    # rank_click.trigger('click')
-    logger.info(session.has_link?("ランキング"))
     until session.has_link?("ランキング") do
-      sleep 2
       logger.info("ランキングリンク探索")
     end
     session.click_link("ランキング")
 
-
-
-    # test
     sleep 2
-    # session.save_screenshot
     @tabelog_list = []
     doc = open_url(session.current_url)
-    doc.xpath('//*[@id="column-main"]/ul/li').each do |node|
-      node.xpath('//a[@class="list-rst__rst-name-target cpy-rst-name"]').each do |node2|
-        @tabelog = gourmet.Tabelog.build
-        @tabelog.rst_name = node2.text
-        @tabelog.url = node2.attribute('href').value
-        @tabelog_list << @tabelog.url
-        @tabelog.save
-      end
+    doc.xpath('//*[@id="column-main"]/ul/li/div[2]').each do |node|
+
+      @tabelog = gourmet.Tabelog.build
+
+      header = node.xpath("div[@class='list-rst__header']/div/div/div/a")
+      rst_body = node.xpath("div[contains(@class,'list-rst__body')]")
+      content = rst_body.xpath("div[@class='list-rst__contents']")
+      photo = rst_body.xpath("div[@class='list-rst__rst-photo js-rst-image-wrap']")
+
+      # header
+      @tabelog.rst_name = header.text
+      @tabelog.url = header.attribute("href").value
+
+      # body
+      @tabelog.text = content.xpath("div/div[@class='list-rst__comment']/a/strong").text
+      @tabelog.hoshi = content.xpath("div/div[@class='list-rst__rate']/p/span").text.to_f
+      @tabelog.img_url = photo.xpath("div/p/a/img").attribute('data-original').value
+      @tabelog.save
     end
-    logger.info("@tabelog_list：#{@tabelog_list[0].to_s}")
-    @tabelog_list[0].to_s
-    # bird = Bird.create(account: reply[:account], tweet:reply[:tweet] , post: post)
-    # bird.tweet
+    gourmet.Tabelog.limit(5)
   end
 
   private

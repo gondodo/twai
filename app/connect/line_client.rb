@@ -38,60 +38,103 @@ class LineClient
     post('/v2/bot/message/reply', body.to_json)
   end
 
-  def reply_carousel(replyToken, text)
-    messages = [{
+  def reply_carousel(replyToken, tabelog)
+    messages = [
+      {
       "type": "template",
-      "altText": "this is a carousel template",
+      "altText": "",
       "template": {
         "type": "carousel",
         "columns": [
             {
-              "thumbnailImageUrl": "https://example.com/bot/images/item1.jpg",
-              "title": "this is menu",
-              "text": "description",
+              "thumbnailImageUrl": tabelog[0].img_url,
+              "title": tabelog[0].rst_name,
+              "text": tabelog[0].text,
               "actions": [
                 {
+                  "type": "uri",
+                  "label": "詳細を見る",
+                  "uri": tabelog[0].url
+                },
+                {
                   "type": "postback",
-                  "label": "Buy",
-                  "data": "action=buy&itemid=111"
-                },
-                {
-                    "type": "postback",
-                    "label": "Add to cart",
-                    "data": "action=add&itemid=111"
-                },
-                {
-                    "type": "uri",
-                    "label": "View detail",
-                    "uri": "http://example.com/page/111"
+                  "label": "もっと見る",
+                  "data": "action=add&itemid=111"
                 }
-              ]
+                ]
             },
-          {
-            "thumbnailImageUrl": "https://example.com/bot/images/item2.jpg",
-            "title": "this is menu",
-            "text": "description",
-            "actions": [
+            {
+              "thumbnailImageUrl": tabelog[1].img_url,
+              "title": tabelog[1].rst_name,
+              "text": tabelog[1].text,
+              "actions": [
                 {
-                    "type": "postback",
-                    "label": "Buy",
-                    "data": "action=buy&itemid=222"
+                  "type": "uri",
+                  "label": "詳細を見る",
+                  "uri": tabelog[1].url
                 },
                 {
-                    "type": "postback",
-                    "label": "Add to cart",
-                    "data": "action=add&itemid=222"
-                },
-                {
-                    "type": "uri",
-                    "label": "View detail",
-                    "uri": "http://example.com/page/222"
+                  "type": "postback",
+                  "label": "もっと見る",
+                  "data": "action=add&itemid=111"
                 }
+                ]
+              },
+              {
+                "thumbnailImageUrl": tabelog[2].img_url,
+                "title": tabelog[2].rst_name,
+                "text": tabelog[2].text,
+                "actions": [
+                  {
+                    "type": "uri",
+                    "label": "詳細を見る",
+                    "uri": tabelog[2].url
+                  },
+                  {
+                    "type": "postback",
+                    "label": "もっと見る",
+                    "data": "action=add&itemid=111"
+                  }
+                  ]
+                },
+                {
+                  "thumbnailImageUrl": tabelog[3].img_url,
+                  "title": tabelog[3].rst_name,
+                  "text": tabelog[3].text,
+                  "actions": [
+                    {
+                      "type": "uri",
+                      "label": "詳細を見る",
+                      "uri": tabelog[3].url
+                    },
+                    {
+                      "type": "postback",
+                      "label": "もっと見る",
+                      "data": "action=add&itemid=111"
+                    }
+                    ]
+                  },
+                  {
+                    "thumbnailImageUrl": tabelog[4].img_url,
+                    "title": tabelog[4].rst_name,
+                    "text": tabelog[4].text,
+                    "actions": [
+                      {
+                        "type": "uri",
+                        "label": "詳細を見る",
+                        "uri": tabelog[4].url
+                      },
+                      {
+                        "type": "postback",
+                        "label": "もっと見る",
+                        "data": "action=add&itemid=111"
+                      }
+                      ]
+                    }
             ]
           }
-      ]
-  }
-}]
+        }
+    ]
 
     body = {
       "replyToken" => replyToken,
