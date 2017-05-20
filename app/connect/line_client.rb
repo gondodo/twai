@@ -42,7 +42,7 @@ class LineClient
     messages = [
       {
       "type": "template",
-      "altText": "this is menu",
+      "altText": "検索したで",
       "template": {
         "type": "carousel",
         "columns": [

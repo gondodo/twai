@@ -12,7 +12,7 @@ class Gourmet < ActiveRecord::Base
 
     def self.search(post)
       # 最初の問い
-      if post == "グルメ検索"
+      if post == "グルメ検索" || @keyword.status == SEARCH_STATUS.index("設定完了").to_s
         @keyword = create(status: SEARCH_STATUS.index("駅名検索"))
         return "駅名はー？"
       end

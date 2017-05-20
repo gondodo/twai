@@ -8,14 +8,13 @@ class Tabelog < ActiveRecord::Base
 
   def self.scrape(gourmet)
     Capybara.register_driver :poltergeist do |app|
-      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10000 })
+      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 5000 })
         # Capybara::Poltergeist::Driver.new(app, inspector: 'google-chrome-stable')
       # Capybara::Poltergeist::Driver.new(app,:js_errors => false, :inspector => true)
     end
     Capybara.javascript_driver = :poltergeist
     # Capybara.javascript_driver = :poltergeist_debug
     session = Capybara::Session.new(:poltergeist)
-    # session.driver.headers = { "lang" => "en" }
     session.driver.headers = { 'Accept-Language' => 'ja' }
     session.visit "https://tabelog.com/"
 
@@ -42,26 +41,28 @@ class Tabelog < ActiveRecord::Base
     # session.driver.debug
 
     until session.has_css?('#lstcost-sidebar') do
+      sleep 1
       logger.info("#lstcost-sidebar 探索中")
     end
     session.find('#lstcost-sidebar').find(:xpath, "option[#{value}]").select_option
 
     until session.has_css?('#column-side') do
-      sleep 2
+      sleep 1
       logger.info("#column-side 探索中")
     end
     sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[2]/div[3]/button')
     sidebar_btn.trigger('click')
 
+    sleep 2
     # ランキング画面遷移
     logger.info("ランキング画面遷移")
+    session.save_screenshot
     until session.has_link?("ランキング") do
       logger.info("ランキングリンク探索")
     end
     session.click_link("ランキング")
 
     sleep 2
-    @tabelog_list = []
     doc = open_url(session.current_url)
     doc.xpath('//*[@id="column-main"]/ul/li/div[2]').each do |node|
 
