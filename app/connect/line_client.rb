@@ -49,7 +49,7 @@ class LineClient
             {
               "thumbnailImageUrl": tabelog[0].img_url,
               "title": "#{tabelog[0].rst_name} ★#{tabelog[0].hoshi}",
-              "text": tabelog[0].text,
+              "text": "夜：#{tabelog[0].dinner_cost} 昼：#{tabelog[0].lunch_cost} #{tabelog[0].text}",
               "actions": [
                 {
                   "type": "uri",
@@ -66,7 +66,7 @@ class LineClient
             {
               "thumbnailImageUrl": tabelog[1].img_url,
               "title": "#{tabelog[1].rst_name} ★#{tabelog[1].hoshi}",
-              "text": tabelog[1].text,
+              "text": "夜：#{tabelog[1].dinner_cost} 昼：#{tabelog[1].lunch_cost} #{tabelog[1].text}",
               "actions": [
                 {
                   "type": "uri",
@@ -83,7 +83,7 @@ class LineClient
               {
                 "thumbnailImageUrl": tabelog[2].img_url,
                 "title": "#{tabelog[2].rst_name} ★#{tabelog[2].hoshi}",
-                "text": tabelog[2].text,
+                "text": "夜：#{tabelog[2].dinner_cost} 昼：#{tabelog[2].lunch_cost} #{tabelog[2].text}",
                 "actions": [
                   {
                     "type": "uri",
@@ -100,7 +100,7 @@ class LineClient
                 {
                   "thumbnailImageUrl": tabelog[3].img_url,
                   "title": "#{tabelog[3].rst_name} ★#{tabelog[3].hoshi}",
-                  "text": tabelog[3].text,
+                  "text": "夜：#{tabelog[3].dinner_cost} 昼：#{tabelog[3].lunch_cost} #{tabelog[3].text}",
                   "actions": [
                     {
                       "type": "uri",
@@ -117,7 +117,7 @@ class LineClient
                   {
                     "thumbnailImageUrl": tabelog[4].img_url,
                     "title": "#{tabelog[4].rst_name} ★#{tabelog[4].hoshi}",
-                    "text": tabelog[4].text,
+                    "text": "夜：#{tabelog[4].dinner_cost} 昼：#{tabelog[4].lunch_cost} #{tabelog[4].text}",
                     "actions": [
                       {
                         "type": "uri",
