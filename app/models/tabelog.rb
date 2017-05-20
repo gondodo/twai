@@ -56,7 +56,6 @@ class Tabelog < ActiveRecord::Base
     sleep 2
     # ランキング画面遷移
     logger.info("ランキング画面遷移")
-    session.save_screenshot
     until session.has_link?("ランキング") do
       logger.info("ランキングリンク探索")
     end
