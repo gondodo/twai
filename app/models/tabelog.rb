@@ -81,6 +81,8 @@ class Tabelog < ActiveRecord::Base
       logger.info("name: #{header.text}  text: #{content.xpath("div/div[@class='list-rst__comment']/a/strong").text}")
       @tabelog.text = content.xpath("div/div[@class='list-rst__comment']/a/strong").text
       @tabelog.hoshi = content.xpath("div/div[@class='list-rst__rate']/p/span").text.to_f
+      @tabelog.dinner_cost = content.xpath("div/ul[@class='list-rst__budget']/li/span[2]")[0].text
+      @tabelog.lunch_cost = content.xpath("div/ul[@class='list-rst__budget']/li/span[2]")[1].text
       @tabelog.img_url = photo.xpath("div/p/a/img").attribute('data-original').value
       @tabelog.save
     end
