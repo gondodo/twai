@@ -78,6 +78,7 @@ class WebhookController < ApplicationController
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
     case message
     when kind_of?(Tabelog::ActiveRecord_AssociationRelation)
+      logger.info("goal")
       res = client.reply_carousel(replyToken, message)
     when "ジャンル検索"
       res = client.reply_genre(replyToken)
