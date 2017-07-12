@@ -18,11 +18,7 @@ class WebhookController < ApplicationController
     mid = event['source']['userId']
     replyToken = event['replyToken']
     # 取得したテキスト
-    # if event["type"] == "message"
     text_message = event["message"]["text"]
-    # else
-    #   text_message = "こんにちわ"
-    # end
 
     logger.info("text_message:#{text_message}")
     if User.find_by(mid: mid) == nil
@@ -80,8 +76,11 @@ class WebhookController < ApplicationController
 
     logger.info("success?")
     client = LineClient.new(CHANNEL_ACCESS_TOKEN, OUTBOUND_PROXY)
-    if message.kind_of?(Tabelog::ActiveRecord_AssociationRelation)
+    case message
+    when kind_of?(Tabelog::ActiveRecord_AssociationRelation)
       res = client.reply_carousel(replyToken, message)
+    when "ジャンル検索"
+      res = client.reply_genre(replyToken)
     else
       res = client.reply(replyToken, message)
     end
@@ -91,7 +90,6 @@ class WebhookController < ApplicationController
     else
       logger.info({fail: res})
     end
-
     render :nothing => true, status: :ok
   end
 
