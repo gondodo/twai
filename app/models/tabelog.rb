@@ -50,7 +50,7 @@ class Tabelog < ActiveRecord::Base
       sleep 1
       logger.info("#column-side 探索中")
     end
-    sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[2]/div[3]/button')
+    sidebar_btn = session.find(:xpath, '//*[@id="column-side"]/form/div[1]/div[3]/button')
     sidebar_btn.trigger('click')
 
     sleep 2
