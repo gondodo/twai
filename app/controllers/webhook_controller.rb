@@ -18,11 +18,7 @@ class WebhookController < ApplicationController
     mid = event['source']['userId']
     replyToken = event['replyToken']
     # 取得したテキスト
-    # if event["type"] == "message"
     text_message = event["message"]["text"]
-    # else
-    #   text_message = "こんにちわ"
-    # end
 
     logger.info("text_message:#{text_message}")
     if User.find_by(mid: mid) == nil
@@ -30,7 +26,6 @@ class WebhookController < ApplicationController
     else
       user = User.find_by(mid: mid)
     end
-    binding.pry
     last_dialogue_info = LastDialogueInfo.find_by(mid: mid)
     Message.create(user_id: user.id, text_message: text_message, mode: last_dialogue_info.mode )
     docomo_client = DocomoClient.new(DOCOMO_API_KEY)
