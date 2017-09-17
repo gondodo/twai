@@ -30,11 +30,11 @@ class WebhookController < ApplicationController
     else
       user = User.find_by(mid: mid)
     end
-    Message.create(user_id: user.id, text_message: text_message)
-
+    last_dialogue_info = LastDialogueInfo.find_by(mid: mid)
+    Message.create(user_id: user.id, text_message: text_message, mode: last_dialogue_info.mode )
     docomo_client = DocomoClient.new(DOCOMO_API_KEY)
     response = nil
-    last_dialogue_info = LastDialogueInfo.find_by(mid: mid)
+
 
     # 一番最初のとき
     if last_dialogue_info.nil?
@@ -60,6 +60,7 @@ class WebhookController < ApplicationController
       # メッセージ設定
       case last_dialogue_info.mode
         when "dialog", "srtr"
+          if text_message =
             response =  docomo_client.dialogue(text_message, last_dialogue_info.mode, last_dialogue_info.context)
             last_dialogue_info.mode = response.body['mode']
             last_dialogue_info.da = response.body['da']
