@@ -18,7 +18,6 @@ class WebhookController < ApplicationController
     # 送ってきたユーザID
     mid = event['source']['userId']
     replyToken = event['replyToken']
-    
     # 取得したテキスト
     text_message = event["message"]["text"]
 
