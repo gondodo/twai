@@ -14,10 +14,11 @@ class WebhookController < ApplicationController
 
     logger.info(params)
     event = params["events"][0]
-    
+
     # 送ってきたユーザID
     mid = event['source']['userId']
     replyToken = event['replyToken']
+    
     # 取得したテキスト
     text_message = event["message"]["text"]
 
