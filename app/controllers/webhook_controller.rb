@@ -11,6 +11,7 @@ class WebhookController < ApplicationController
     unless is_validate_signature
       render :nothing => true, status: 470
     end
+
     logger.info(params)
     event = params["events"][0]
 
